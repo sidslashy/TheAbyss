@@ -10,6 +10,7 @@ public class RandomDungeonGeneratorEditor : Editor
 
     private void Awake()
     {
+        Debug.Log("Awake!!");
         _generator = (AbstractTileMapGenerator)target;
     }
 

@@ -4,23 +4,15 @@ using UnityEngine;
 
 public class SimpleRandomWalkMapGenerator : AbstractTileMapGenerator
 {
-    [SerializeField] private int _numIterations = 10;
-    [SerializeField] private int _walkLength = 10;
 
-    //[SerializeField] private Vector2Int _startPosition = Vector2Int.zero;
-
-   // [SerializeField] private TileMapVisualizer _tileMapVisualizer;
-
-    //private HashSet<Vector2Int> _map = new HashSet<Vector2Int>();
+    [SerializeField] private RandomWalkGeneratorSO _data;
 
     public void GenerateMap()
     {
+        // TODO: Update the Wall Generator!! Maybe rework the architechture.
         var map = RunSimpleRandomWalk();
-        //foreach (var item in map)
-        //{
-        //    print(item);
-        //}
         _tileMapVisualizer.DrawGroundTiles(map);
+        WallGenerator.GenerateWall(map,_tileMapVisualizer);
     }
 
     protected override void RunProceduralGeneration()
@@ -33,12 +25,14 @@ public class SimpleRandomWalkMapGenerator : AbstractTileMapGenerator
         var path = new HashSet<Vector2Int>();
         var startPosition = _startPosition;
 
-        for (var i = 0; i < _numIterations; i++)
+        for (var i = 0; i < _data.NumIterations; i++)
         {
-            var generatedPath = ProceduralGeneration.SimpleRandomWalk(startPosition, _walkLength);
+            var generatedPath = ProceduralGeneration.SimpleRandomWalk(startPosition, _data.WalkLength);
             path.UnionWith(generatedPath);
-            startPosition = path.ElementAt(Random.Range(0, path.Count));
-
+            if(_data.IsNewStartPositionPerIteration)
+            {
+                startPosition = path.ElementAt(Random.Range(0, path.Count));
+            }
         }
 
         return path;
