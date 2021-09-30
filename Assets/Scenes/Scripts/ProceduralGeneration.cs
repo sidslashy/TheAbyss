@@ -4,6 +4,7 @@ using UnityEngine;
 
 public static class ProceduralGeneration
 {
+    // TODO: Make this static class a service class once Zenject is integrated...
     public static HashSet<Vector2Int> SimpleRandomWalk(Vector2Int startPosition, int walkLength)
     {
         var path = new HashSet<Vector2Int>();
@@ -23,14 +24,18 @@ public static class ProceduralGeneration
 
 
 
-    public static HashSet<Vector2Int> CorridorGenerator(Vector2Int startPosition, int walkLength, int iterations)
+    public static CorridorGenData CorridorGenerator(Vector2Int startPosition, int walkLength, int iterations)
     {
+        var corridorData = new CorridorGenData();
+     
         var path = new HashSet<Vector2Int>();
+        var corridorStartPosition = new List<Vector2Int>();
 
         var currentPosition = startPosition;
         path.Add(startPosition);
+        corridorStartPosition.Add(startPosition);
 
-        for(var i = 0; i < iterations; i++)
+        for (var i = 0; i < iterations; i++)
         {
             var walkPath = new HashSet<Vector2Int>();
             var direction = Direction2D.GetRandomDirection();
@@ -40,11 +45,13 @@ public static class ProceduralGeneration
                 walkPath.Add(nextPosition);
                 currentPosition = nextPosition;
             }
+            corridorStartPosition.Add(currentPosition);
             path.UnionWith(walkPath);
         }
-        
+        corridorData.CorridorTilePositions = path;
+        corridorData.CorridorStartPositions = corridorStartPosition;
 
-        return path;
+        return corridorData;
 
     }
 }
@@ -55,10 +62,10 @@ public static class Direction2D
 {
     public static List<Vector2Int> _directions = new List<Vector2Int>()
     {
-        new Vector2Int(1,0),
-        new Vector2Int(0,1),
-        new Vector2Int(-1,0),
-        new Vector2Int(0,-1)
+        Vector2Int.right,
+        Vector2Int.left,
+        Vector2Int.up,
+        Vector2Int.down
     };
 
     public static Vector2Int GetRandomDirection()

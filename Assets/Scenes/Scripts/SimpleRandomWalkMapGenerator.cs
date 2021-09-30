@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SimpleRandomWalkMapGenerator : AbstractTileMapGenerator
 {
-
+    [SerializeField] protected Vector2Int _startPosition = Vector2Int.zero;
     [SerializeField] private RandomWalkGeneratorSO _data;
 
     public void GenerateMap()

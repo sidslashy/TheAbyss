@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(menuName ="DungeonGenerator/RandomWalk", fileName ="RndWalk_")]
+[CreateAssetMenu(menuName ="DungeonGeneratorConfig/RandomWalk", fileName ="RndWalk_")]
 public class RandomWalkGeneratorSO : ScriptableObject
 {
     public int WalkLength => _walkLength;
